@@ -31,43 +31,23 @@ jobs:
       - name: Archive binaries
         run: |
           mkdir artifacts
-          tar -czf artifacts/smpp-cli-linux-amd64.tar.gz -C build smpp-cli-linux-amd64
-          tar -czf artifacts/smpp-cli-linux-arm64.tar.gz -C build smpp-cli-linux-arm64
-          zip artifacts/smpp-cli-windows-amd64.zip build/smpp-cli-windows-amd64.exe
-          tar -czf artifacts/smpp-cli-darwin-amd64.tar.gz -C build smpp-cli-darwin-amd64
-          tar -czf artifacts/smpp-cli-darwin-arm64.tar.gz -C build smpp-cli-darwin-arm64
+          tar -czf artifacts/smpp-cli-linux-amd64.${{github.ref_name}}.tar.gz -C build smpp-cli-linux-amd64
+          tar -czf artifacts/smpp-cli-linux-arm64.${{github.ref_name}}.tar.gz -C build smpp-cli-linux-arm64
+          zip artifacts/smpp-cli-windows-amd64.${{github.ref_name}}.zip build/smpp-cli-windows-amd64.exe
+          tar -czf artifacts/smpp-cli-darwin-amd64.${{github.ref_name}}.tar.gz -C build smpp-cli-darwin-amd64
+          tar -czf artifacts/smpp-cli-darwin-arm64.${{github.ref_name}}.tar.gz -C build smpp-cli-darwin-arm64
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: smpp-cli-linux-amd64.${{github.ref_name}}.tar.gz -C build smpp-cli-linux-amd64
-          path: artifacts/smpp-cli-linux-amd64.tar.gz
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: smpp-cli-linux-arm64.${{github.ref_name}}.tar.gz
-          path: artifacts/smpp-cli-linux-arm64.tar.gz
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: smpp-cli-windows-amd64.${{github.ref_name}}.zip
-          path: artifacts/smpp-cli-windows-amd64.zip
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: smpp-cli-darwin-amd64.${{github.ref_name}}.tar.gz
-          path: artifacts/smpp-cli-darwin-amd64.tar.gz
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: smpp-cli-darwin-arm64.${{github.ref_name}}.tar.gz
-          path: artifacts/smpp-cli-darwin-arm64.tar.gz
+          name: release-artifacts
+          path: artifacts/*
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: artifacts/smpp-cli*.${{github.ref_name}}.tar.gz, artifacts/smpp-cli-windows-amd64.${{github.ref_name}}.zip
+          artifacts: artifacts/smpp-cli*
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name_name }}
-          body: "Automated release for tag ${{ github.ref_name_name }}"
+          tag: ${{ github.ref}}
+          name: Release ${{ github.ref_name }}
+          body: "Automated release for tag ${{ github.ref_name }}"
           allowUpdates: true
