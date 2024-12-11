@@ -1,0 +1,69 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Matches tags like v1.0, v1.0.0, etc.
+permissions:
+  contents: write
+jobs:
+  build:
+    name: Build for all platforms
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21' # Specify your Go version
+
+      - name: Build binaries
+        run: |
+          GOOS=linux GOARCH=amd64 go build -o build/myapp-linux-amd64 main.go
+          GOOS=linux GOARCH=arm64 go build -o build/myapp-linux-arm64 main.go
+          GOOS=windows GOARCH=amd64 go build -o build/myapp-windows-amd64.exe main.go
+          GOOS=darwin GOARCH=amd64 go build -o build/myapp-darwin-amd64 main.go
+          GOOS=darwin GOARCH=arm64 go build -o build/myapp-darwin-arm64 main.go
+
+      - name: Archive binaries
+        run: |
+          mkdir artifacts
+          tar -czf artifacts/myapp-linux-amd64.tar.gz -C build myapp-linux-amd64
+          tar -czf artifacts/myapp-linux-arm64.tar.gz -C build myapp-linux-arm64
+          zip artifacts/myapp-windows-amd64.zip build/myapp-windows-amd64.exe
+          tar -czf artifacts/myapp-darwin-amd64.tar.gz -C build myapp-darwin-amd64
+          tar -czf artifacts/myapp-darwin-arm64.tar.gz -C build myapp-darwin-arm64
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-binaries
+          path: artifacts/
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: release-binaries
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          body: |
+            Binaries for version ${{ github.ref_name }}
+          files: |
+            artifacts/*
+          draft: false
+          prerelease: false
