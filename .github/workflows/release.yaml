@@ -40,30 +40,34 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: release-binaries
-          path: artifacts/
-
-  release:
-    name: Create Release
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
+          name: smpp-cli-linux-amd64.${{github.ref}}.tar.gz -C build smpp-cli-linux-amd64
+          path: artifacts/smpp-cli-linux-amd64.tar.gz
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
         with:
-          name: release-binaries
-
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: smpp-cli-linux-arm64.${{github.ref}}.tar.gz
+          path: artifacts/smpp-cli-linux-arm64.tar.gz
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
         with:
-          tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
-          body: |
-            Binaries for version ${{ github.ref_name }}
-          files: |
-            artifacts/*
-          draft: false
-          prerelease: false
+          name: smpp-cli-windows-amd64.${{github.ref}}.zip
+          path: artifacts/smpp-cli-windows-amd64.zip
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: smpp-cli-darwin-amd64.${{github.ref}}.tar.gz
+          path: artifacts/smpp-cli-darwin-amd64.tar.gz
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: smpp-cli-darwin-arm64.${{github.ref}}.tar.gz
+          path: artifacts/smpp-cli-darwin-arm64.tar.gz
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: smpp-cli-linux-amd64.${{github.ref}}.tar.gz, smpp-cli-linux-arm64.${{github.ref}}.tar.gz, smpp-cli-windows-amd64.${{github.ref}}.zip, smpp-cli-darwin-amd64.${{github.ref}}.tar.gz, smpp-cli-darwin-arm64.${{github.ref}}.tar.gz
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          name: Release ${{ github.ref_name }}
+          body: "Automated release for tag ${{ github.ref_name }}"
+          allowUpdates: true
