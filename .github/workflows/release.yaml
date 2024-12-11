@@ -65,7 +65,7 @@ jobs:
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: smpp-cli-linux-amd64.${{github.ref_name}}.tar.gz, smpp-cli-linux-arm64.${{github.ref_name}}.tar.gz, smpp-cli-windows-amd64.${{github.ref_name}}.zip, smpp-cli-darwin-amd64.${{github.ref_name}}.tar.gz, smpp-cli-darwin-arm64.${{github.ref_name}}.tar.gz
+          artifacts: artifacts/smpp-cli*.${{github.ref_name}}.tar.gz, artifacts/smpp-cli-windows-amd64.${{github.ref_name}}.zip
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
           name: Release ${{ github.ref_name_name }}
