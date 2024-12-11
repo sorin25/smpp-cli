@@ -40,34 +40,34 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: smpp-cli-linux-amd64.${{github.ref}}.tar.gz -C build smpp-cli-linux-amd64
+          name: smpp-cli-linux-amd64.${{github.ref_name}}.tar.gz -C build smpp-cli-linux-amd64
           path: artifacts/smpp-cli-linux-amd64.tar.gz
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: smpp-cli-linux-arm64.${{github.ref}}.tar.gz
+          name: smpp-cli-linux-arm64.${{github.ref_name}}.tar.gz
           path: artifacts/smpp-cli-linux-arm64.tar.gz
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: smpp-cli-windows-amd64.${{github.ref}}.zip
+          name: smpp-cli-windows-amd64.${{github.ref_name}}.zip
           path: artifacts/smpp-cli-windows-amd64.zip
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: smpp-cli-darwin-amd64.${{github.ref}}.tar.gz
+          name: smpp-cli-darwin-amd64.${{github.ref_name}}.tar.gz
           path: artifacts/smpp-cli-darwin-amd64.tar.gz
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: smpp-cli-darwin-arm64.${{github.ref}}.tar.gz
+          name: smpp-cli-darwin-arm64.${{github.ref_name}}.tar.gz
           path: artifacts/smpp-cli-darwin-arm64.tar.gz
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: smpp-cli-linux-amd64.${{github.ref}}.tar.gz, smpp-cli-linux-arm64.${{github.ref}}.tar.gz, smpp-cli-windows-amd64.${{github.ref}}.zip, smpp-cli-darwin-amd64.${{github.ref}}.tar.gz, smpp-cli-darwin-arm64.${{github.ref}}.tar.gz
+          artifacts: smpp-cli-linux-amd64.${{github.ref_name}}.tar.gz, smpp-cli-linux-arm64.${{github.ref_name}}.tar.gz, smpp-cli-windows-amd64.${{github.ref_name}}.zip, smpp-cli-darwin-amd64.${{github.ref_name}}.tar.gz, smpp-cli-darwin-arm64.${{github.ref_name}}.tar.gz
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref }}
-          name: Release ${{ github.ref_name }}
-          body: "Automated release for tag ${{ github.ref_name }}"
+          tag: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name_name }}
+          body: "Automated release for tag ${{ github.ref_name_name }}"
           allowUpdates: true
