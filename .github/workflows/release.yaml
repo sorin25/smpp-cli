@@ -22,20 +22,20 @@ jobs:
 
       - name: Build binaries
         run: |
-          GOOS=linux GOARCH=amd64 go build -o build/myapp-linux-amd64 main.go
-          GOOS=linux GOARCH=arm64 go build -o build/myapp-linux-arm64 main.go
-          GOOS=windows GOARCH=amd64 go build -o build/myapp-windows-amd64.exe main.go
-          GOOS=darwin GOARCH=amd64 go build -o build/myapp-darwin-amd64 main.go
-          GOOS=darwin GOARCH=arm64 go build -o build/myapp-darwin-arm64 main.go
+          GOOS=linux GOARCH=amd64 go build -o build/smpp-cli-linux-amd64 main.go
+          GOOS=linux GOARCH=arm64 go build -o build/smpp-cli-linux-arm64 main.go
+          GOOS=windows GOARCH=amd64 go build -o build/smpp-cli-windows-amd64.exe main.go
+          GOOS=darwin GOARCH=amd64 go build -o build/smpp-cli-darwin-amd64 main.go
+          GOOS=darwin GOARCH=arm64 go build -o build/smpp-cli-darwin-arm64 main.go
 
       - name: Archive binaries
         run: |
           mkdir artifacts
-          tar -czf artifacts/myapp-linux-amd64.tar.gz -C build myapp-linux-amd64
-          tar -czf artifacts/myapp-linux-arm64.tar.gz -C build myapp-linux-arm64
-          zip artifacts/myapp-windows-amd64.zip build/myapp-windows-amd64.exe
-          tar -czf artifacts/myapp-darwin-amd64.tar.gz -C build myapp-darwin-amd64
-          tar -czf artifacts/myapp-darwin-arm64.tar.gz -C build myapp-darwin-arm64
+          tar -czf artifacts/smpp-cli-linux-amd64.tar.gz -C build smpp-cli-linux-amd64
+          tar -czf artifacts/smpp-cli-linux-arm64.tar.gz -C build smpp-cli-linux-arm64
+          zip artifacts/smpp-cli-windows-amd64.zip build/smpp-cli-windows-amd64.exe
+          tar -czf artifacts/smpp-cli-darwin-amd64.tar.gz -C build smpp-cli-darwin-amd64
+          tar -czf artifacts/smpp-cli-darwin-arm64.tar.gz -C build smpp-cli-darwin-arm64
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
